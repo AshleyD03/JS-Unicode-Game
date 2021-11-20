@@ -3,26 +3,38 @@ declare global {
     texture: Array<String>;
     x: number;
     y: number;
-  }
-
-  interface Slide {
-    spriteStack: Array<Sprite>;
-    listeners: Array<GameEventListener>;
-    storage: {
-      [key: string]: string | null;
-    };
-    addListener: (key: String, func: (e: GameEvent) => void) => void,
-    addSprite: (sprite: Sprite, index?: number) => void
-  }
-
-  interface GameEvent extends Event {
-    gameKey: String;
     slide: Slide;
   }
 
-  interface GameEventListener {
-    key: String;
-    func: (e: GameEvent) => void;
+  interface Slide {
+    sprites: Array<Sprite>;
+    listeners: Array<KeyEventListener>;
+    storage: {
+      [key: string]: string | null;
+    };
+    active: boolean;
+    addListener: (key: String, func: (e: KeyEvent) => void) => KeyEventListener;
+    removeListener: (listener: KeyEventListener) => boolean;
+    addSprite: (sprite: Sprite, index?: number) => Sprite;
+    removeSprite: (sprite: Sprite, index?: number) => boolean;
   }
+
+  interface KeyEvent extends KeyboardEvent {
+    slide: Slide;
+  }
+
+  interface KeyEventListener {
+    key: String;
+    func: (e: KeyEvent) => void;
+  }
+
+  interface Package {
+    update: (slide: Slide) => void;
+    newSprite: (prev?: Optional<Sprite>) => Sprite;
+    newSlide: () => Slide;
+    sleep: (milisecs: number) => Promise<void>;
+  }
+
+  type Optional<T> = { [K in keyof T]?: T[K] };
 }
 export type _ = null;
