@@ -75,8 +75,8 @@ export const initCanvasUpdate = (target: HTMLTextAreaElement) => {
 
   return (slide: Slide) => {
     // 69 x 32
-    const map = Array.from({ length: 32 }, () => [
-      ...Array.from({ length: 69 }, () => " "),
+    const map = Array.from({ length: 35 }, () => [
+      ...Array.from({ length: 72 }, () => " "),
       "\n",
     ]);
 
@@ -104,20 +104,24 @@ export const initCanvasUpdate = (target: HTMLTextAreaElement) => {
     }
 
     // Apply sprites to map
-    console.log(slide);
     slide.sprites.forEach((sprite) => {
       console.log(sprite);
       for (let y = 0; y < sprite.texture.length; y++) {
         const line = sprite.texture[y];
         for (let x = 0; x < line.length; x++) {
-          map[sprite.y + y][sprite.x + x] = line[x];
+          const yCord = sprite.y + y;
+          const xCord = sprite.x + x;
+
+          if (yCord < map.length) map[yCord][xCord] = line[x];
         }
       }
     });
 
     // Push map to canvas
     target.value = "";
-    target.value = [].concat(...map).join("");
+    map.forEach(row => {
+      target.value += row.slice(0, 72).join("") + '\n'
+    })
   };
 };
 

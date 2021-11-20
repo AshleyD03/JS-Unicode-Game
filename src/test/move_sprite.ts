@@ -2,7 +2,7 @@ export async function main ({
 	update, newSprite, newSlide, sleep
 }: Package) {
 
-	// 69 x 32 
+	// 72 x 35 
 	const main = newSlide();
 	const sprite = newSprite({
 		x: 1,
@@ -26,11 +26,11 @@ export async function main ({
 		update(main)
 	})
 	main.addListener('s', () => {
-		if (sprite.y < 32) sprite.y += 1
+		if (sprite.y < 35 - 3) sprite.y += 1
 		update(main)
 	})
 	main.addListener('d', () => {
-		if (sprite.x < 71) sprite.x += 1
+		if (sprite.x < 72 - 4) sprite.x += 1
 		update(main)
 	})
 }
