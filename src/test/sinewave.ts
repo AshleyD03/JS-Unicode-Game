@@ -3,12 +3,24 @@ export async function main ({
 }: Package) {
 	// 72 x 35 
 	const main = newSlide();
+	const line: Sprite[] = [];
 	for (let i=0; i<72; i++) {
-		main.addSprite(newSprite({
+		const sprite = newSprite({
 			x: i,
 			texture: ['@']
-		}))
+		})
+		line.push(sprite)
+		main.addSprite(sprite)
 	}
+
+	main.addSprite(newSprite({
+		x: 1,
+		y: 1,
+		texture: [
+			'Sinewave',
+			'By: Ashley'
+		]
+	}))
 	
 	let isOn = true;
 	let isForward = true;
@@ -16,7 +28,7 @@ export async function main ({
 
 	async function sinewave () {
 		while (isOn) {
-			main.sprites.forEach(sprite => {
+			line.forEach(sprite => {
 				const y = Math.round((Math.sin((sprite.x + i) / 20 ) + 1) * 17)
 				sprite.y = y
 			})
