@@ -20,7 +20,7 @@ export const newSlide = (): Slide => {
               slide: slide,
               ...e,
             });
-        })
+        });
       }
       return listener;
     },
@@ -69,13 +69,13 @@ export const newSprite = (prev?: Sprite): Sprite => {
   };
 };
 
-export const initCanvasUpdate = (target: HTMLTextAreaElement) => {
+export const initCanvasUpdate = (target: HTMLPreElement) => {
   let currentSlide = newSlide();
   currentSlide.active = true;
 
   return (slide: Slide) => {
-    // 69 x 32
-    const map = Array.from({ length: 35 }, () => [
+    // 72 x 35
+    const map = Array.from({ length: 36 }, () => [
       ...Array.from({ length: 72 }, () => " "),
       "\n",
     ]);
@@ -106,21 +106,28 @@ export const initCanvasUpdate = (target: HTMLTextAreaElement) => {
     // Apply sprites to map
     slide.sprites.forEach((sprite) => {
       for (let y = 0; y < sprite.texture.length; y++) {
-        const line = sprite.texture[y];
+        let line = sprite.texture[y];
+        if (typeof line == "function") line = line();
+
         for (let x = 0; x < line.length; x++) {
           const yCord = sprite.y + y;
+          if (yCord > map.length) return
           const xCord = sprite.x + x;
+          let text = line[x];
 
-          if (yCord < map.length) map[yCord][xCord] = line[x];
+          if (sprite.noClip && text === " ") text = map[yCord][xCord];
+
+          map[yCord][xCord] = `<font color="${sprite.color}">${text}</font>`;
+          
         }
       }
     });
 
     // Push map to canvas
-    target.value = "";
-    map.forEach(row => {
-      target.value += row.slice(0, 72).join("") + '\n'
-    })
+    target.innerHTML = "";
+    map.forEach((row) => {
+      target.innerHTML += row.slice(0, 72).join("") + "\n";
+    });
   };
 };
 
@@ -131,3 +138,18 @@ export const sleep = async (milisecs: number): Promise<void> => {
     }, milisecs);
   });
 };
+
+export const colors = [
+  "#ff0000",
+  "#ff8000",
+  "#ffff00",
+  "#80ff00",
+  "#00ff00",
+  "#00ff80",
+  "#00ffff",
+  "#0080ff",
+  "#0000ff",
+  "#8000ff",
+  "#ff00ff",
+  "#ff0080",
+];

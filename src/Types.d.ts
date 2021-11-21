@@ -1,9 +1,11 @@
 declare global {
   interface Sprite {
-    texture: Array<String>;
+    texture: Array<String | (() => String)>;
     x: number;
     y: number;
     slide: Slide;
+    color?: String;
+    noClip?: boolean;
   }
 
   interface Slide {
@@ -33,6 +35,7 @@ declare global {
     newSprite: (prev?: Optional<Sprite>) => Sprite;
     newSlide: () => Slide;
     sleep: (milisecs: number) => Promise<void>;
+    colors: String[];
   }
 
   type Optional<T> = { [K in keyof T]?: T[K] };
