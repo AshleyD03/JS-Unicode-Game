@@ -1,11 +1,20 @@
 declare global {
-  interface Sprite {
-    texture: Array<String | (() => String)>;
+
+  interface AbstractSprite {
     x: number;
     y: number;
     slide: Slide;
     color?: String;
     noClip?: boolean;
+  }
+
+  interface Sprite extends AbstractSprite {
+    texture: Array<String | (() => String)>;
+  }
+
+  interface AnimatedSprite extends AbstractSprite {
+    textures: Array<Array<String | (() => String)>>;
+    currentTexture: number;
   }
 
   interface Slide {
