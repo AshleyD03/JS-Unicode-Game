@@ -106,6 +106,7 @@ export const initCanvasUpdate = (target: HTMLPreElement) => {
     // Apply sprites to map
     slide.sprites.forEach((sprite) => {
       for (let y = 0; y < sprite.texture.length; y++) {
+        
         let line = sprite.texture[y];
         if (typeof line == "function") line = line();
 
